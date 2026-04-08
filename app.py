@@ -1,6 +1,8 @@
 from flask import Flask ,jsonify
+from routes import rec_bp
 
 app = Flask(__name__)
+app.register_blueprint(rec_bp)
 
 games = [
     {"name": "The Witcher 3", "genres": ["RPG", "Aventura"], "platform": "PC"},

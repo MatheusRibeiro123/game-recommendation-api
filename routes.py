@@ -1,13 +1,14 @@
-from flask import jsonify,request
-from app import app,games
+from flask import jsonify,request,Blueprint
+from app import games
 
+rec_bp = Blueprint("recommendations",__name__)
 
-@app.route("/games", methods = ["GET"])
+@rec_bp.route("/games", methods = ["GET"])
 def listar_games():
     return jsonify(games)
 
-@app.route("/recommend")
-def recomentar_app():
+@rec_bp.route("/recommend", methods=["POST"])
+def recomentar_game():
     user_preferences = request.get_json()
 
     if not user_preferences:
@@ -16,7 +17,15 @@ def recomentar_app():
     results = []
 
     user_genres = user_preferences.get("genres",[])
-    user_plataform = user_preferences.get("plataform",[])
+
+    for game in games:
+        for genre in user_genres:
+            if genre in game["genres"]:
+                results.append(game)
+
+    return jsonify(results)
+
+
     
 
     
