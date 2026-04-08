@@ -1,5 +1,5 @@
 from flask import jsonify,request,Blueprint
-from app import games
+from games import games
 
 rec_bp = Blueprint("recommendations",__name__)
 
@@ -10,6 +10,7 @@ def listar_games():
 @rec_bp.route("/recommend", methods=["POST"])
 def recomentar_game():
     user_preferences = request.get_json()
+    
 
     if not user_preferences:
         return jsonify({"Erro":"Dados não enviados"})
@@ -17,13 +18,32 @@ def recomentar_game():
     results = []
 
     user_genres = user_preferences.get("genres",[])
+    user_platform = user_preferences.get("platform")
 
     for game in games:
+        game_score = 0
+
         for genre in user_genres:
             if genre in game["genres"]:
-                results.append(game)
+                game_score +=2
+            
+
+        if user_platform == game["platform"]:
+            game_score += 1
+
+        if game_score > 0:
+            results.append({
+              "game":game,
+              "score":game_score
+         })
+
+    results.sort(key=lambda x: x["score"], reverse=True)
 
     return jsonify(results)
+            
+            
+            
+            
 
 
     
