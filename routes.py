@@ -1,5 +1,5 @@
 from flask import jsonify,request,Blueprint
-from games import games
+from models.games import games
 
 rec_bp = Blueprint("recommendations",__name__)
 
