@@ -1,14 +1,11 @@
 from flask import jsonify,request,Blueprint
-from models.games import games
+from database import db
+from models.games import Game
 
 rec_bp = Blueprint("recommendations",__name__)
 
-@rec_bp.route("/games", methods = ["GET"])
-def listar_games():
-    return jsonify(games)
-
 @rec_bp.route("/recommend", methods= ["POST"])
-def recomendar_game_2():
+def recomendar_game():
     data = request.get_json()
 
     if not data:
@@ -17,25 +14,29 @@ def recomendar_game_2():
     user_preferences = data.get("genres",[])
     user_platform = data.get("platform",[])
 
+    games = Game.query.all()
     recomendations = []
 
     for game in games:
-        game_score= 0
-
-        for genre in user_preferences:
-            if genre in game["genres"]:
-                game_score += 2
-
-        if any(g in game["platform"] for g in user_platform):
+        game_score = 0
+        if game.plataforma in user_platform:
             game_score += 1
 
-        if game_score>0:
-            recomendations.append({"name":game["name"],
-                                  "score":game_score})
+        for genre in user_preferences:
+            if genre in game.genero:
+                game_score += 2
 
-    recomendations.sort(key=lambda x:x["score"], reverse=True)
+        if game_score > 0 :
+            recomendations.append({
+                "Game":game.nome,
+                "Pontos":game_score
+            })
+
+    recomendations.sort(key=lambda x : x["Pontos"],reverse=True)
 
     return jsonify(recomendations[:5])
+
+        
 
 
 
