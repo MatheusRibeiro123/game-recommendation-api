@@ -19,20 +19,24 @@ def recomendar_game():
 
     for game in games:
         game_score = 0
-        if game.plataforma in user_platform:
+        plataformas_game = [p.strip() for p in game.plataforma.split(",")]
+        generos_game = [g.strip() for g in game.genero.split(",")]
+        
+        
+        if any(p.strip() in plataformas_game for p in user_platform):
             game_score += 1
 
         for genre in user_preferences:
-            if genre in game.genero:
+            if genre.strip() in generos_game:
                 game_score += 2
 
         if game_score > 0 :
             recomendations.append({
-                "Game":game.nome,
-                "Pontos":game_score
+                "name":game.nome,
+                "score":game_score
             })
 
-    recomendations.sort(key=lambda x : x["Pontos"],reverse=True)
+    recomendations.sort(key=lambda x : x["score"],reverse=True)
 
     return jsonify(recomendations[:5])
 
