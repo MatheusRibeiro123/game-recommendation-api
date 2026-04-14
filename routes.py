@@ -40,6 +40,34 @@ def recomendar_game():
 
     return jsonify(recomendations[:5])
 
+@rec_bp.route("/games",methods = ["POST"])
+def criar_game():
+    dados = request.get_json()
+
+    if not dados:
+        return jsonify({"error":"Dados do game não enviados"})
+    
+    nome = dados.get("nome")
+    genero = dados.get("genero")
+    plataforma = dados.get("plataforma")
+
+    if not nome or not nome.strip() or not genero or not plataforma:
+        return jsonify({"error": "Campos obrigatórios faltando"}), 400    
+    
+    game = Game(
+        nome = nome,
+        genero = genero,
+        plataforma = plataforma
+    )
+
+    db.session.add(game)
+    db.session.commit()
+
+    return jsonify(game.to_dict()) , 201
+
+    
+
+
         
 
 
