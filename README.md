@@ -18,6 +18,9 @@ API REST desenvolvida em Flask para cadastro e recomendação de jogos com base 
 ## 🤖 Sistema de Recomendação
 
 O sistema analisa os jogos cadastrados e retorna recomendações com base nas preferências do usuário.
+### 📸 Exemplo de uso da rota /recommend
+
+[Exemplo de requisição no Thunder Client]<img width="1480" height="687" alt="Captura de tela 2026-04-15 122906" src="https://github.com/user-attachments/assets/829f5f1e-b55c-4e52-bafa-58072dd8b847" />
 
 ### 🧠 Como funciona
 
